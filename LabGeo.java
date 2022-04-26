@@ -14,10 +14,10 @@ public class LabGeo {
 	
 	Scanner input = new Scanner(System.in);
 	
-	private int qdadeEstacaoTotal;
+	private int qdadeTrenasEBalizas;
 	private int qdadeTeodolito;
 	private int qdadeNivelOptico;
-	private int qdadeTrenasEBalizas;
+	private int qdadeEstacaoTotal;
 	private int qdadeGPS;
 	private int qdadeTripe;
 	private int qdadePrisma;
@@ -27,9 +27,8 @@ public class LabGeo {
 		
 	}
 	
-	public LabGeo(Scanner input, int qdadeEstacaoTotal, int qdadeTeodolito, int qdadeNivelOptico,
-			int qdadeTrenasEBalizas, int qdadeGPS, int qdadeTripe, int qdadePrisma, int qdadeEmprestimo) {
-		this.input = input;
+	public LabGeo(int qdadeTrenasEBalizas, int qdadeTeodolito, int qdadeNivelOptico, int qdadeEstacaoTotal,
+			 int qdadeGPS, int qdadeTripe, int qdadePrisma) {
 		this.qdadeEstacaoTotal = qdadeEstacaoTotal;
 		this.qdadeTeodolito = qdadeTeodolito;
 		this.qdadeNivelOptico = qdadeNivelOptico;
@@ -37,7 +36,6 @@ public class LabGeo {
 		this.qdadeGPS = qdadeGPS;
 		this.qdadeTripe = qdadeTripe;
 		this.qdadePrisma = qdadePrisma;
-		this.qdadeEmprestimo = qdadeEmprestimo;
 	}
 
 
@@ -103,9 +101,11 @@ public class LabGeo {
 	 *  do professor durante a aula. Aqui o usuário vai escolher um número para cada uma das atividades que se pode fazer com cada um dos equipamentos e o 
 	 *  programa retornar qual o equipamento mais apropriado ele deve tomar por empréstimo. 
 	 */
+	int opcao;
+	String nomeEquipamento = "";
 	public void escolherEquipamento() {
 		String mensagemDeRetorno = "";
-		int opcao;
+		
 		
 		System.out.print("Qual atividade você vai realizar? ");
 		System.out.println();
@@ -121,15 +121,23 @@ public class LabGeo {
 			switch(opcao) {
 				case 1:
 					mensagemDeRetorno = "Para esta atividade você precisa usar o equipamento: NÍVEL OPTICO";
+					nomeEquipamento = "NÍVEL ÓPTICO";
 					break;
 				case 2: 
 					mensagemDeRetorno = "Para esta atividade você precisa usar o equipamento: TEODOLITO";
+					nomeEquipamento = "TEODOLITO";
 					break;
-				case 3: mensagemDeRetorno = "Para esta atividade você precisa usar o equipamento: TRENAS E BALIZAS";
+				case 3:
+					mensagemDeRetorno = "Para esta atividade você precisa usar o equipamento: TRENAS E BALIZAS";
+					nomeEquipamento = "TRENA E BELIZAS";
 					break;
-				case 4: mensagemDeRetorno = "Para esta atividade você precisa usar o equipamento: ESTAÇÃO TOTAL";
+				case 4:
+					mensagemDeRetorno = "Para esta atividade você precisa usar o equipamento: ESTAÇÃO TOTAL";
+					nomeEquipamento = "ESTAÇÃO TOTAL";
 					break;
-				case 5: mensagemDeRetorno = "Para esta atividade você precisa usar o equipamento: RECEPTOR GNSS";
+				case 5:
+					mensagemDeRetorno = "Para esta atividade você precisa usar o equipamento: RECEPTOR GNSS";
+					nomeEquipamento = "RECEPTOR GNSS";
 					break;
 				default:
 					mensagemDeRetorno = "Opcao invalida";
@@ -143,30 +151,66 @@ public class LabGeo {
 
 	// Função para calcular a quantidade de empréstimos e quantidade de equipamentos disponíveis.
 	public void emprestimoEquipamento(int qdadeEmprestimo) {
-		if (qdadeEstacaoTotal > 0) {
-			this.qdadeEmprestimo += 1;
-			this.qdadeEstacaoTotal -= qdadeEmprestimo;
-			this.qdadeTripe -= qdadeEmprestimo;
-			this.qdadePrisma -= qdadeEmprestimo;
-		}
+		
+		escolherEquipamento();
+		
+		if(opcao == 1) {
+			if (qdadeNivelOptico > 0) {
+				this.qdadeNivelOptico -= qdadeEmprestimo;
+				this.qdadeEmprestimo += 1;
+				this.qdadeTripe -= qdadeEmprestimo;
+				this.qdadePrisma -= qdadeEmprestimo;
+			}
+		} else if(opcao == 2) {
+			if (qdadeTeodolito > 0) {
+				this.qdadeTeodolito -= qdadeEmprestimo;
+				this.qdadeEmprestimo += 1;
+				this.qdadeTripe -= qdadeEmprestimo;
+				this.qdadePrisma -= qdadeEmprestimo;
+			}
+		} else if(opcao == 3) {
+			if (qdadeTrenasEBalizas > 0) {
+				this.qdadeTrenasEBalizas -= qdadeEmprestimo;
+				this.qdadeEmprestimo += 1;
+				this.qdadeTripe -= qdadeEmprestimo;
+				this.qdadePrisma -= qdadeEmprestimo;
+			}
+		} else if(opcao == 4) {
+			if (qdadeEstacaoTotal > 0) {
+				this.qdadeEstacaoTotal -= qdadeEmprestimo;
+				this.qdadeEmprestimo += 1;
+				this.qdadeTripe -= qdadeEmprestimo;
+				this.qdadePrisma -= qdadeEmprestimo;
+			}
+		}  else if(opcao == 5) {
+			if (qdadeGPS > 0) {
+				this.qdadeGPS -= qdadeEmprestimo;
+				this.qdadeEmprestimo += 1;
+				this.qdadeTripe -= qdadeEmprestimo;
+				this.qdadePrisma -= qdadeEmprestimo;
+			}
+		}		
 	}
 	
 	// Função para imprimir um pequeno relatório.
-	public String impressaoEquipamentosDisponiveis() {
+	public void impressaoEquipamentosDisponiveis() {
 		if (getQdadeEstacaoTotal() > 0) {
-			return ("Após " 
-					+ qdadeEmprestimo + 
-					" empréstimo(s) tem-se disponível no laboratório: \n" + 
-					qdadeEstacaoTotal + 
-					" Estação Total,\n" 
-					+ qdadeTripe 
-					+ " Tripes,\n" 
-					+ qdadePrisma 
-					+ " Prismas.\n");
+			System.out.printf("Após %d empréstimo(s) tem-se disponível no laboratório: \n", qdadeEmprestimo);
+			if (opcao == 1) {
+				System.out.print(getQdadeNivelOptico());
+			} else if (opcao == 2 ) {
+				System.out.print(getQdadeTeodolito());
+			} else if (opcao == 3) {
+				System.out.print(getQdadeTrenasEBalizas());
+			} else if (opcao == 4) {
+				System.out.print(getQdadeEstacaoTotal());
+			} else {
+				System.out.print(getQdadeGPS());
+			}
+			System.out.printf(" %s, \n%d Tripes, \n%d Prismas.\n", nomeEquipamento, getQdadeTripe(), getQdadePrisma());
 		} else {
-			return ("Não há mais equipamentos disponíveis para empréstimo.");
-		}
-		
+			System.out.println("Não há mais equipamentos disponíveis para empréstimo.");
+		}		
 	}
 	
 }
